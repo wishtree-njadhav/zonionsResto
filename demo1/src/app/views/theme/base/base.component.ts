@@ -12,7 +12,7 @@ import { MenuConfig } from '../../../core/_config/menu.config';
 import { PageConfig } from '../../../core/_config/page.config';
 // User permissions
 import { NgxPermissionsService } from 'ngx-permissions';
-import { currentUserPermissions, Permission } from '../../../core/auth';
+import { currentUserPermissions, Permission, TokenStorageService } from '../../../core/auth';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../../core/reducers';
 
@@ -53,12 +53,13 @@ export class BaseComponent implements OnInit, OnDestroy {
 		private pageConfigService: PageConfigService,
 		private htmlClassService: HtmlClassService,
 		private store: Store<AppState>,
-		private permissionsService: NgxPermissionsService) {
+		private permissionsService: NgxPermissionsService,
+		private tokenStorageService: TokenStorageService) {
 		this.loadRolesWithPermissions();
 
 		// register configs by demos
 		this.layoutConfigService.loadConfigs(new LayoutConfig().configs);
-		this.menuConfigService.loadConfigs(new MenuConfig().configs);
+		this.menuConfigService.loadConfigs(new MenuConfig(this.tokenStorageService).configs);
 		this.pageConfigService.loadConfigs(new PageConfig().configs);
 
 		// setup element classes

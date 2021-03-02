@@ -11,15 +11,18 @@ import { TranslateService } from '@ngx-translate/core';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../../core/reducers';
 // Auth
-import { AuthNoticeService, AuthService, Login } from '../../../../core/auth';
+import { AuthNoticeService, AuthService, Login, User } from '../../../../core/auth';
+import { TokenStorageService } from '../../../../core/auth/_services/token-storage.service';
 
 /**
  * ! Just example => Should be removed in development
  */
 const DEMO_PARAMS = {
-	EMAIL: 'admin@demo.com',
+	USERNAME: 'demo',
 	PASSWORD: 'demo'
 };
+
+const USER_ROLE = 'auth-role';
 
 @Component({
 	selector: 'kt-login',
@@ -32,7 +35,8 @@ export class LoginComponent implements OnInit, OnDestroy {
 	loading = false;
 	isLoggedIn$: Observable<boolean>;
 	errors: any = [];
-
+	isLoggedIn = false;
+	roles: string[] = [];
 	private unsubscribe: Subject<any>;
 
 	private returnUrl: any;
@@ -59,11 +63,11 @@ export class LoginComponent implements OnInit, OnDestroy {
 		private store: Store<AppState>,
 		private fb: FormBuilder,
 		private cdr: ChangeDetectorRef,
-		private route: ActivatedRoute
+		private route: ActivatedRoute,
+		private tokenStorage: TokenStorageService
 	) {
 		this.unsubscribe = new Subject();
 	}
-
 	/**
 	 * @ Lifecycle sequences => https://angular.io/guide/lifecycle-hooks
 	 */
@@ -73,10 +77,14 @@ export class LoginComponent implements OnInit, OnDestroy {
 	 */
 	ngOnInit(): void {
 		this.initLoginForm();
+		if (this.tokenStorage.getToken()) {
+			this.isLoggedIn = true;
+			this.roles = this.tokenStorage.getUser().roles;
 
+		  }
 		// redirect back to the returnUrl before login
 		this.route.queryParams.subscribe(params => {
-			this.returnUrl = params.returnUrl || '/';
+			this.returnUrl = params.returnUrl || '/restaurants/home';
 		});
 	}
 
@@ -96,25 +104,24 @@ export class LoginComponent implements OnInit, OnDestroy {
 	 */
 	initLoginForm() {
 		// demo message to show
-		if (!this.authNoticeService.onNoticeChanged$.getValue()) {
-			const initialNotice = `Use account
-			<strong>${DEMO_PARAMS.EMAIL}</strong> and password
-			<strong>${DEMO_PARAMS.PASSWORD}</strong> to continue.`;
-			this.authNoticeService.setNotice(initialNotice, 'info');
-		}
+		// if (!this.authNoticeService.onNoticeChanged$.getValue()) {
+		// 	const initialNotice = `Use account
+		// 	<strong>${DEMO_PARAMS.EMAIL}</strong> and password
+		// 	<strong>${DEMO_PARAMS.PASSWORD}</strong> to continue.`;
+		// 	this.authNoticeService.setNotice(initialNotice, 'info');
+		// }
 
 		this.loginForm = this.fb.group({
-			email: [DEMO_PARAMS.EMAIL, Validators.compose([
+			username: [DEMO_PARAMS.USERNAME, Validators.compose([
 				Validators.required,
-				Validators.email,
 				Validators.minLength(3),
-				Validators.maxLength(320) // https://stackoverflow.com/questions/386294/what-is-the-maximum-length-of-a-valid-email-address
+				Validators.maxLength(20)
 			])
 			],
 			password: [DEMO_PARAMS.PASSWORD, Validators.compose([
 				Validators.required,
 				Validators.minLength(3),
-				Validators.maxLength(100)
+				Validators.maxLength(20)
 			])
 			]
 		});
@@ -124,6 +131,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 	 * Form Submit
 	 */
 	submit() {
+		// alert(JSON.stringify(this.roles));
 		const controls = this.loginForm.controls;
 		/** check form */
 		if (this.loginForm.invalid) {
@@ -136,11 +144,11 @@ export class LoginComponent implements OnInit, OnDestroy {
 		this.loading = true;
 
 		const authData = {
-			email: controls.email.value,
+			username: controls.username.value,
 			password: controls.password.value
 		};
 		this.auth
-			.login(authData.email, authData.password)
+			.login(authData.username, authData.password)
 			.pipe(
 				tap(user => {
 					if (user) {
@@ -156,7 +164,19 @@ export class LoginComponent implements OnInit, OnDestroy {
 					this.cdr.markForCheck();
 				})
 			)
-			.subscribe();
+			.subscribe(
+				data => {
+					this.tokenStorage.saveToken(data.accessToken);
+					this.tokenStorage.saveUser(data);
+
+					this.isLoggedIn = true;
+		   this.roles = this.tokenStorage.getUser().roles;
+		   sessionStorage.setItem(USER_ROLE, this.tokenStorage.getUser().roles);
+		// alert(window.sessionStorage.getItem(USER_ROLE));
+		   this.store.dispatch(new Login({authToken: this.tokenStorage.getToken()}));
+		//    alert(JSON.stringify(this.tokenStorage.getUser()));
+				}
+			);
 	}
 
 	/**

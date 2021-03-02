@@ -1,0 +1,33 @@
+<div class="div">
+    <h2 style="text-align: center;" translate="">Restaurant List</h2>
+    <br>
+    <table class="table">
+            <thead>
+                <th>Restaurant Name</th>
+                <th>Address</th>
+                <th>Contact Number</th>
+                <th>Open Time</th>
+                <th>Close Time</th>
+                <th>Last Updated Time</th>
+                <th>Status</th>
+                &nbsp;&nbsp;<th>Action</th>
+            </thead>
+            <tbody *ngFor="let rl of restaurantList">
+                <tr >
+                    <td>{{rl.restaurantName}}</td>
+                    <td>{{rl.address}}</td>
+                    <td>{{rl.phone_no}}</td>
+                    <td>{{rl.open_time }}</td>
+                    <td>{{rl.close_time}}</td>
+                    <td>{{rl.updatedTime|slice:0:5}}</td>
+                    <td>{{rl.status}}</td>
+                    <td><button class="btn btn-primary" (click)="edit(rl.id)">Edit</button></td>
+                    <td><button class="btn btn-primary" (click)="deleteRestaurant(rl.id)">Delete</button></td>
+                    <td><button class="btn btn-primary" (click)="changeStatus(rl.id)" translate="">Change Status</button></td>
+                </tr>
+            </tbody>
+    </table>
+    <button style="float: left;" class="btn btn-primary" 
+    (click)="back()" translate="">Back</button>
+  </div>
+  

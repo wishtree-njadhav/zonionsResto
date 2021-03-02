@@ -8,29 +8,62 @@ import {ErrorPageComponent} from './views/theme/content/error-page/error-page.co
 import {AuthGuard} from './core/auth';
 
 const routes: Routes = [
-	{path: 'auth', loadChildren: () => import('app/views/pages/auth/auth.module').then(m => m.AuthModule)},
+
+	
+	   {path: 'auth',
+	    loadChildren: 'app/views/pages/auth/auth.module#AuthModule'},
+		{
+			path: 'dashboard',
+			loadChildren: 'app/views/pages/dashboard/dashboard.module#DashboardModule'
+		},
 
 	{
 		path: '',
 		component: BaseComponent,
 		canActivate: [AuthGuard],
 		children: [
+			
 			{
-				path: 'dashboard',
-				loadChildren: () => import('app/views/pages/dashboard/dashboard.module').then(m => m.DashboardModule),
-			},
-			{
-				path: 'mail',
-				loadChildren: () => import('app/views/pages/apps/mail/mail.module').then(m => m.MailModule),
+				path: 'restaurants',
+				loadChildren: 'app/views/pages/restaurants/restaurants.module#RestaurantsModule'
 			},
 			{
 				path: 'builder',
-				loadChildren: () => import('app/views/theme/content/builder/builder.module').then(m => m.BuilderModule),
+				loadChildren: 'app/views/theme/content/builder/builder.module#BuilderModule'
 			},
-					],
+			{
+				path: 'error/403',
+				component: ErrorPageComponent,
+				data: {
+					type: 'error-v6',
+					code: 403,
+					title: '403... Access forbidden',
+					desc: 'Looks like you don\'t have permission to access for requested page.<br> Please, contact administrator',
+				},
+			},
+			{
+				path: 'error/404',
+				component: ErrorPageComponent,
+				data: {
+					type: 'error-v3',
+					code: 404,
+					title: 'Page Not Found'
+				},
+			},
+			{
+				path: 'error/500',
+				component: ErrorPageComponent,
+				data: {
+					type: 'error-v1',
+					code: 500,
+					subtitle: 'Internal Server Error'
+				},
+			},
+			{path: '', redirectTo: 'dashboard', pathMatch: 'full'}
+		],
 	},
 
-	{path: '**', redirectTo: 'error/403', pathMatch: 'full'},
+	{path: '**', redirectTo: 'error/404', pathMatch: 'full'},
 ];
 
 @NgModule({

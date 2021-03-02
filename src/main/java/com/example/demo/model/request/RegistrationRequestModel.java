@@ -6,6 +6,8 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -22,6 +24,7 @@ public @Data class RegistrationRequestModel {
     @Email
     private String email;
     
+    @JsonFormat(with = JsonFormat.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
     private Set<String> role;
     
     @NotBlank

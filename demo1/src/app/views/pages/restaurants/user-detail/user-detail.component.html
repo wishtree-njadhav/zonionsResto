@@ -1,0 +1,27 @@
+<div>
+    <h3 style="text-align: center;">User List</h3>
+    <table class="table table-stripped">
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>email</th>
+                <th>Roles</th>
+                <th>Change Role</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let user of users">
+
+                <td>{{user.username}}</td>
+                <td>{{user.email}}</td>
+                <!-- <ng-container *ngFor="role of 'user.roles'"> -->
+                <td>{{user.roles[0].name|slice:5}}</td>
+            <!-- </ng-container> -->
+                <td><button class="btn btn-primary" (click)="changeRole(user.id)">Change Role</button></td>
+                <td><button class="btn btn-primary" (click)="deleteUser(user.id)">Delete User</button></td>
+
+            </tr>
+        </tbody>
+    </table>
+</div>

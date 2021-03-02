@@ -110,7 +110,7 @@ public class RestaurantService {
 	}
 	
 	public RestaurantModel changeStatus(@PathVariable int id,@PathVariable RestaurantModel resm) {
-		
+		System.out.println(resm);
 		String st="deactive";
 		String st1="active";
 			

@@ -3,6 +3,7 @@ package com.example.demo.entity;
 import java.util.HashSet;
 
 
+
 import java.util.Set;
 
 import javax.annotation.Generated;
@@ -49,7 +50,7 @@ public class RegistrationEntity {
 	private String email;
 
 	@NotBlank
-	@Size(max = 120)
+	@Size(max = 100)
 	private String password;
 
 	@ManyToMany
@@ -69,7 +70,19 @@ public class RegistrationEntity {
 			this.email = email;
 			this.password = password;
 		}
+		
+		
 	
+
+	
+	public RegistrationEntity(Long id, @NotBlank @Size(max = 20) String username,
+				@NotBlank @Size(max = 50) @Email String email, Set<Role> roles) {
+			super();
+			this.id = id;
+			this.username = username;
+			this.email = email;
+			this.roles = roles;
+		}
 
 	public Long getId() {
 		return id;
@@ -111,4 +124,11 @@ public class RegistrationEntity {
 		this.roles = roles;
 	}
 
+	@Override
+	public String toString() {
+		return "RegistrationEntity [id=" + id + ", username=" + username + ", email=" + email + ", password=" + password
+				+ ", roles=" + roles + "]";
+	}
+
+	
 }

@@ -1,10 +1,10 @@
 package com.example.demo.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -18,11 +18,16 @@ import com.example.demo.shared.AuthEntryPointJwt;
 import com.example.demo.shared.AuthTokenFilter;
 
 
+
+
+
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(
+		prePostEnabled = true)
 public class WebSecurity extends WebSecurityConfigurerAdapter{
 	
 	@Autowired
-	UserDetailsServiceImpl userDetailsService;
+	UserDetailsServiceImpl userService;
 
 	@Autowired
 	private AuthEntryPointJwt unauthorizedHandler;
@@ -34,7 +39,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter{
 
 	@Override
 	public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
-		authenticationManagerBuilder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+		authenticationManagerBuilder.userDetailsService(userService).passwordEncoder(passwordEncoder());
 	}
 
 	@Bean
@@ -54,7 +59,11 @@ public class WebSecurity extends WebSecurityConfigurerAdapter{
 			.exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
 			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
 			.authorizeRequests().antMatchers("/api/auth/**").permitAll()
-			.antMatchers("/api/test/**").permitAll()
+			.antMatchers("/v2/api-docs","/configuration/**","/swagger*/**","/webjars/**")
+			.permitAll()
+			.antMatchers("/zonions/file/**").permitAll()
+			.antMatchers("/zonions/restaurant/**").permitAll()
+			//.antMatchers("/api/test/**").permitAll()
 			.anyRequest().authenticated();
 
 		http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);

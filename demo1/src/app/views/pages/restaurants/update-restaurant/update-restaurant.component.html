@@ -1,0 +1,37 @@
+<div class="container jumbotron">
+    <h1 style="text-align: center;">Edit Restaurant</h1>
+        <form (ngSubmit)="onSubmit()">
+            <br>
+        <div class="form-group">
+            <b><label >Restaurant Name<span style="color: red;">*</span></label></b>
+            <input type="text" placeholder="Enter restaurant name" required name="restoName"[(ngModel)]="restaurant.restaurantName" class="form-control"/>
+        </div>
+        <div class="form-group">
+            <b><label >Address<span style="color: red;">*</span></label></b>
+            <textarea placeholder="enter address" class="form-control" name="Address" [(ngModel)]="restaurant.address"></textarea>
+        </div>
+        <div class="form-group">
+            <b><label >Contact Number<span style="color: red;">*</span></label></b>
+            <input type="text" placeholder="Enter phone no." name="phone"class="form-control" [(ngModel)]="restaurant.phone_no">
+        </div>
+        <div class="form-group">
+            <b><label >Open Time</label></b>
+            <ngb-timepicker  name="openTime" [(ngModel)]="open_time"></ngb-timepicker>
+        </div>
+        <div class="form-group">
+            <b><label >Close Time</label></b>
+            <ngb-timepicker  name="closeTime" [(ngModel)]="close_time"></ngb-timepicker>
+        </div>
+        <div>
+            <img [src]="url" height="100px" width="100px"/> &nbsp;
+            <input type="file" name="imageName" (change)="onChange($event)" style="width: 210px;"/>
+            <span style="color: red;">*Image size should be less than 1mb</span>
+            <br><br>
+            <button type="button" class="btn btn-primary" (click)="updateImage()" translate="">Upload Menu</button>
+        </div>
+        <br/>
+        <button type="submit" class="btn btn-success">Update</button>
+    </form>
+    <br/>
+   
+</div>

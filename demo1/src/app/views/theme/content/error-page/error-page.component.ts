@@ -81,10 +81,13 @@ export class ErrorPageComponent implements OnInit, OnDestroy {
 					this.image = './assets/media/error/bg1.jpg';
 				}
 				if (!this.code) {
-					this.code = '404';
+					this.code = '500';
 				}
 				if (!this.desc) {
 					this.desc = 'OOPS! Something went wrong here';
+				}
+				if (!this.subtitle) {
+					this.subtitle = 'Sorry we can\'t seem to find the page you\'re looking for.';
 				}
 				break;
 			case 'error-v2':
@@ -112,7 +115,7 @@ export class ErrorPageComponent implements OnInit, OnDestroy {
 					this.subtitle = 'Sorry we can\'t seem to find the page you\'re looking for.';
 				}
 				if (!this.desc) {
-					this.desc = 'There may be amisspelling in the URL entered,<br>' + 'or the page you are looking for may no longer exist.';
+					this.desc = 'There may be a misspelling in the URL entered,<br>' + 'or the page you are looking for may no longer exist.';
 				}
 				if (!this.image) {
 					this.image = './assets/media/error/bg3.jpg';
@@ -143,7 +146,7 @@ export class ErrorPageComponent implements OnInit, OnDestroy {
 					this.desc = 'We\'re working on it and we\'ll get it fixed<br>' + 'as soon possible.<br>' + 'You can back or use our Help Center.';
 				}
 				if (!this.image) {
-					this.image = './assets/media/error/bg5.jpg';
+					this.image = './assets/media/error/bg1.jpg';
 				}
 				break;
 			case 'error-v6':
@@ -160,6 +163,9 @@ export class ErrorPageComponent implements OnInit, OnDestroy {
 			default:
 				if (!this.image) {
 					this.image = './assets/media/error/bg1.jpg';
+				}
+				if (!this.desc) {
+					this.desc = 'Looks like something went wrong.<br>' + 'We\'re working on it';
 				}
 		}
 	}

@@ -13,6 +13,12 @@ export const locale = {
 			FEATURES: 'Features',
 			APPS: 'Apps',
 			DASHBOARD: 'Dashboard',
+			Restaurants:'Restaurant',
+			Create_Restaurant:'Create Restaurant',
+			Restaurant_list:'Restaurant List',
+			Active_Restaurant:'Active Restaurant',
+			User_Management:'User Management',
+			Active_Users:'Active Users'
 		},
 		AUTH: {
 			GENERAL: {

@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import java.util.Collection;
+
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -34,7 +35,7 @@ public class UserDetailsImpl implements UserDetails{
 		this.password = password;
 		this.authorities = authorities;
 	}
-
+	
 	public static UserDetailsImpl build(RegistrationEntity user) {
 		List<GrantedAuthority> authorities = user.getRoles().stream()
 				.map(role -> new SimpleGrantedAuthority(role.getName().name()))

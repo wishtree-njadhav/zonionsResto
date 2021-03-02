@@ -201,4 +201,3 @@ var KTHeader = function(elementId, options) {
 if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
     module.exports = KTHeader;
 }
-

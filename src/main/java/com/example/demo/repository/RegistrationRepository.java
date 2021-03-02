@@ -18,5 +18,6 @@ public interface RegistrationRepository extends JpaRepository<RegistrationEntity
 
 	Boolean existsByEmail(String email);
 
+	Boolean deleteByUsername(String username);
 
 }

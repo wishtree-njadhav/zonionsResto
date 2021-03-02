@@ -1,11 +1,13 @@
 package com.example.demo.controller;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,21 +25,25 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.entity.ERole;
 import com.example.demo.entity.RegistrationEntity;
+import com.example.demo.entity.RegistrationEntityDto;
 import com.example.demo.entity.Role;
 import com.example.demo.model.request.RegistrationRequestModel;
 import com.example.demo.model.request.UserLoginRequestModel;
 import com.example.demo.model.response.JwtResponse;
 import com.example.demo.model.response.MessageResponse;
+import com.example.demo.repository.RegistrationDtoRepository;
 import com.example.demo.repository.RegistrationRepository;
-import com.example.demo.repository.RestaurantRepository;
 import com.example.demo.repository.RoleRepository;
 import com.example.demo.service.UserDetailsImpl;
+import com.example.demo.service.UserDetailsServiceImpl;
 import com.example.demo.shared.JwtUtils;
 
-@CrossOrigin(origins = "http://localhost:4200")
+
+
+
+@CrossOrigin(origins = "http://localhost:5000")
 @RestController
 @RequestMapping("/api/auth")
-
 public class AuthController {
 	
 	@Autowired
@@ -55,8 +61,12 @@ public class AuthController {
 	@Autowired
 	JwtUtils jwtUtils;
 
+	@Autowired
+	RegistrationDtoRepository dtoRepository;
+	@Autowired
+	UserDetailsServiceImpl service;
 	@PostMapping("/signin")
-	public ResponseEntity<?> authenticateUser(@Valid @RequestBody UserLoginRequestModel loginRequest) {
+	public ResponseEntity<?> authenticateUser(@Valid @RequestBody UserLoginRequestModel loginRequest,HttpServletRequest request) {
 
 		Authentication authentication = authenticationManager.authenticate(
 				new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
@@ -68,7 +78,36 @@ public class AuthController {
 		List<String> roles = userDetails.getAuthorities().stream()
 				.map(item -> item.getAuthority())
 				.collect(Collectors.toList());
+		Optional<RegistrationEntityDto> findByUsername = dtoRepository.findByUsername(loginRequest.getUsername());
+		List<String> role=new ArrayList<>();
+		RegistrationEntityDto user=findByUsername.get();
+	
+			
+			for(Role r:user.getRoles()) {
+	            role.add(r.getName().name());
+	            System.out.println("Getting role......"+r.getName().name());
+	        	roles=role;
+	        }
+			
+			@SuppressWarnings("unchecked")
+		    List<String> usernames = (List<String>) request.getSession().getAttribute("SESSION_USER");
+		    if (usernames == null) {
+		      usernames = new ArrayList<>();
 
+		      request.getSession().setAttribute("SESSION_USER", loginRequest.getUsername());
+		      request.getSession().setMaxInactiveInterval(10 * 60);
+
+		    }
+
+		    usernames.add(loginRequest.getUsername());
+		    request.getSession().setAttribute("SESSION_USER", usernames);
+
+		    request.getSession().setMaxInactiveInterval(10 * 60);
+		
+		
+		
+		
+       System.out.println(roles);
 		return ResponseEntity.ok(new JwtResponse(jwt, 
 												 userDetails.getId(), 
 												 userDetails.getUsername(), 
@@ -94,51 +133,24 @@ public class AuthController {
 		RegistrationEntity user = new RegistrationEntity(signUpRequest.getUsername(), 
 							 signUpRequest.getEmail(),
 							 encoder.encode(signUpRequest.getPassword()));
-
+		
+		RegistrationEntityDto user1 = new RegistrationEntityDto(signUpRequest.getUsername(), 
+				 signUpRequest.getEmail());
+		
+       
 		Set<String> strRoles = signUpRequest.getRole();
 		
 		Set<Role> roles = new HashSet<>();
 		
 		Role userRole = roleRepository.findByName(ERole.ROLE_USER)
 				.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-		roles.add(userRole);
-//		Optional<Role> userRole=roleRepository.findByName(ERole.ROLE_USER);
-//		roles.add(userRole);
-
-//		if (strRoles == null) {
-//			Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-//					.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-//			roles.add(userRole);
-//		} else {
-//			strRoles.forEach(role -> {
-//				switch (role) {
-//				case "admin":
-//					Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
-//							.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-//					roles.add(adminRole);
-//
-//					break;
-//				case "mod":
-//					Role modRole = roleRepository.findByName(ERole.ROLE_MODERATOR)
-//							.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-//					roles.add(modRole);
-//
-//					break;
-//				default:
-//					Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-//							.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-//					roles.add(userRole);
-//				}
-//			});
-//		}
-        
+		roles.add(userRole);        
 		user.setRoles(roles);
+		user1.setRoles(roles);
 		userRepository.save(user);
-
+		dtoRepository.save(user1); 
 		return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
 	}
 
 	
-	
-
 }

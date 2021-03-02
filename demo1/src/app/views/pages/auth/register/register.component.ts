@@ -10,7 +10,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../../core/reducers';
 // Auth
-import { AuthNoticeService, AuthService, Register, User } from '../../../../core/auth/';
+import { AuthNoticeService, AuthService, Register, TokenStorageService, User } from '../../../../core/auth/';
 import { Subject } from 'rxjs';
 import { ConfirmPasswordValidator } from './confirm-password.validator';
 
@@ -23,6 +23,10 @@ export class RegisterComponent implements OnInit, OnDestroy {
 	registerForm: FormGroup;
 	loading = false;
 	errors: any = [];
+	isValid = true;
+	username: any;
+	email: any;
+	password: any;
 
 	private unsubscribe: Subject<any>; // Read more: => https://brianflove.com/2016/12/11/anguar-2-unsubscribe-observables/
 
@@ -44,7 +48,8 @@ export class RegisterComponent implements OnInit, OnDestroy {
 		private auth: AuthService,
 		private store: Store<AppState>,
 		private fb: FormBuilder,
-		private cdr: ChangeDetectorRef
+		private cdr: ChangeDetectorRef,
+		private tokenStorageService: TokenStorageService
 	) {
 		this.unsubscribe = new Subject();
 	}
@@ -75,36 +80,35 @@ export class RegisterComponent implements OnInit, OnDestroy {
 	 */
 	initRegisterForm() {
 		this.registerForm = this.fb.group({
-			fullname: ['', Validators.compose([
+			username: ['', Validators.compose([
 				Validators.required,
 				Validators.minLength(3),
-				Validators.maxLength(100)
+				Validators.maxLength(20)
 			])
 			],
 			email: ['', Validators.compose([
 				Validators.required,
 				Validators.email,
 				Validators.minLength(3),
-				// https://stackoverflow.com/questions/386294/what-is-the-maximum-length-of-a-valid-email-address
-				Validators.maxLength(320)
+				Validators.maxLength(20)
 			]),
 			],
-			username: ['', Validators.compose([
-				Validators.required,
-				Validators.minLength(3),
-				Validators.maxLength(100)
-			]),
-			],
+			// username: ['', Validators.compose([
+			// 	Validators.required,
+			// 	Validators.minLength(3),
+			// 	Validators.maxLength(100)
+			// ]),
+			// ],
 			password: ['', Validators.compose([
 				Validators.required,
 				Validators.minLength(3),
-				Validators.maxLength(100)
+				Validators.maxLength(20)
 			])
 			],
 			confirmPassword: ['', Validators.compose([
 				Validators.required,
 				Validators.minLength(3),
-				Validators.maxLength(100)
+				Validators.maxLength(20)
 			])
 			],
 			agree: [false, Validators.compose([Validators.required])]
@@ -121,10 +125,12 @@ export class RegisterComponent implements OnInit, OnDestroy {
 
 		// check form
 		if (this.registerForm.invalid) {
+			this.isValid = false;
+			alert(this.isValid);
 			Object.keys(controls).forEach(controlName =>
 				controls[controlName].markAsTouched()
 			);
-			return;
+			return this.isValid;
 		}
 
 		this.loading = true;
@@ -136,17 +142,22 @@ export class RegisterComponent implements OnInit, OnDestroy {
 			return;
 		}
 
-		const _user: User = new User();
-		_user.clear();
-		_user.email = controls.email.value;
-		_user.username = controls.username.value;
-		_user.fullname = controls.fullname.value;
-		_user.password = controls.password.value;
-		_user.roles = [];
-		this.auth.register(_user).pipe(
-			tap(user => {
-				if (user) {
-					this.store.dispatch(new Register({authToken: user.accessToken}));
+		const user: User = new User();
+		user.clear();
+		user.email = controls.email.value;
+		user.username = controls.username.value;
+		// _user.fullname = controls.fullname.value;
+		user.password = controls.password.value;
+		// _user.roles = [];
+		// this.username = controls.username.value;
+		// this.email = controls.email.value;
+		// this.password = controls.password.value;
+
+
+		this.auth.register(user).pipe(
+			tap(data => {
+				if (this.isValid) {
+					this.store.dispatch(new Register({authToken: data.accessToken}));
 					// pass notice message to the login page
 					this.authNoticeService.setNotice(this.translate.instant('AUTH.REGISTER.SUCCESS'), 'success');
 					this.router.navigateByUrl('/auth/login');

@@ -12,14 +12,23 @@ import { Router } from '@angular/router';
 const API_USERS_URL = 'api/users';
 const API_PERMISSION_URL = 'api/permissions';
 const API_ROLES_URL = 'api/roles';
+const API_AUTH_URL = 'http://localhost:8080/api/auth/';
+
+const httpOptions = {
+    headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+  };
+
 
 @Injectable()
 export class AuthService {
     constructor(private http: HttpClient) {}
     // Authentication/Authorization
-    login(email: string, password: string): Observable<User> {
-        return this.http.post<User>(API_USERS_URL, { email, password });
-    }
+    login(username: string, password: string): Observable<any> {
+        return this.http.post(API_AUTH_URL + 'signin', {
+          username,
+          password
+        }, httpOptions);
+      }
 
     getUserByToken(): Observable<User> {
         const userToken = localStorage.getItem(environment.authTokenKey);
@@ -31,9 +40,10 @@ export class AuthService {
     register(user: User): Observable<any> {
         const httpHeaders = new HttpHeaders();
         httpHeaders.set('Content-Type', 'application/json');
-        return this.http.post<User>(API_USERS_URL, user, { headers: httpHeaders })
+        return this.http.post<User>(API_AUTH_URL + 'signup', user, { headers: httpHeaders })
             .pipe(
                 map((res: User) => {
+                    // alert(JSON.stringify(user));
                     return res;
                 }),
                 catchError(err => {
@@ -42,12 +52,7 @@ export class AuthService {
             );
     }
 
-    /*
-     * Submit forgot password request
-     *
-     * @param {string} email
-     * @returns {Observable<any>}
-     */
+
     public requestPassword(email: string): Observable<any> {
     	return this.http.get(API_USERS_URL + '/forgot?=' + email)
     		.pipe(catchError(this.handleError('forgot-password', []))
@@ -71,10 +76,10 @@ export class AuthService {
     }
 
     // UPDATE => PUT: update the user on the server
-	updateUser(_user: User): Observable<any> {
+	updateUser(user: User): Observable<any> {
         const httpHeaders = new HttpHeaders();
         httpHeaders.set('Content-Type', 'application/json');
-		      return this.http.put(API_USERS_URL, _user, { headers: httpHeaders });
+		      return this.http.put(API_USERS_URL, user, { headers: httpHeaders });
 	}
 
     // CREATE =>  POST: add a new user to the server

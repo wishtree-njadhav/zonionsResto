@@ -107,13 +107,30 @@
 	<i *ngIf="item.submenu" class="kt-menu__ver-arrow la la-angle-right"></i>
 </ng-template>
 
-<ng-template #menuItemSeparatorTemplate let-item="item" let-parentItem="parentItem">
+<!-- <ng-template #menuItemSeparatorTemplate let-item="item" let-parentItem="parentItem">
 	<li class="kt-menu__separator"><span></span></li>
-</ng-template>
+</ng-template> -->
 
-<ng-template #menuItemSectionTemplate let-item="item" let-parentItem="parentItem">
+<!-- <ng-template #menuItemSectionTemplate let-item="item" let-parentItem="parentItem">
 	<li class="kt-menu__section">
 		<h4 class="kt-menu__section-text">{{item.section}}</h4>
 		<i class="kt-menu__section-icon flaticon-more-v2"></i>
 	</li>
+</ng-template> -->
+
+<ng-template>
+	<li
+	class="menu-item"
+	aria-haspopup="true"
+	routerLinkActive="menu-item-active"
+	>
+<a class="menu-link" routerLink="/my-page" routerLinkActive="active">
+  <span
+		[inlineSVG]="'./assets/media/svg/icons/Design/Layers.svg'"
+		cacheSVG="true"
+		class="svg-icon menu-icon"
+  ></span>
+  <span class="menu-text">My Page</span>
+</a>
+</li>
 </ng-template>

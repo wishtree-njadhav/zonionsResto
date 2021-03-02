@@ -1,5 +1,6 @@
 package com.example.demo.model;
 
+import java.io.Serializable;
 import java.util.Arrays;
 
 import javax.persistence.Column;
@@ -14,8 +15,9 @@ import com.fasterxml.jackson.annotation.JsonView;
 
 @Entity
 @Table(name="restaurant")
-public class RestaurantModel {
+public class RestaurantModel  implements Serializable{
 
+	private static final long serialVersionUID = 6665821165040459474L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;

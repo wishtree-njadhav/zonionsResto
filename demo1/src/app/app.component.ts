@@ -11,7 +11,7 @@ import { locale as esLang } from './core/_config/i18n/es';
 import { locale as jpLang } from './core/_config/i18n/jp';
 import { locale as deLang } from './core/_config/i18n/de';
 import { locale as frLang } from './core/_config/i18n/fr';
-
+import { locale as hiLang } from './core/_config/i18n/hi';
 @Component({
 	// tslint:disable-next-line:component-selector
 	selector: 'body[kt-root]',
@@ -39,7 +39,7 @@ export class AppComponent implements OnInit, OnDestroy {
 				         private splashScreenService: SplashScreenService) {
 
 		// register translations
-		this.translationService.loadTranslations(enLang, chLang, esLang, jpLang, deLang, frLang);
+		this.translationService.loadTranslations(enLang, chLang, esLang, jpLang, deLang, frLang,hiLang);
 	}
 
 	/**

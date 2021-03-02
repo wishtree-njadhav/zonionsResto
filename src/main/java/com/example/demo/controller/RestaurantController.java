@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,7 +23,9 @@ import org.springframework.web.multipart.MultipartFile;
 import com.example.demo.model.RestaurantModel;
 import com.example.demo.repository.RestaurantRepository;
 import com.example.demo.service.RestaurantService;
-@CrossOrigin(origins = "http://localhost:4200")
+
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
+@CrossOrigin(origins = "http://localhost:5000")
 @RestController
 @RequestMapping("/zonions")
 public class RestaurantController {
@@ -33,6 +36,7 @@ public class RestaurantController {
 	
 	//To add restaurant object
 	@PostMapping("/restaurant")
+	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<RestaurantModel> save(@RequestBody RestaurantModel rest){
 		return restaurantService.createRestaurant(rest);
 	}
@@ -44,38 +48,58 @@ public class RestaurantController {
 		return restaurantService.uploadImage(file,id);
 	}
 	
+	
+	private static final String RESTAURANT_SERVICE = "restaurantService";
+
+	  public ResponseEntity<String> rateLimiterFallback(Exception e) {
+	    return new ResponseEntity<>(
+	        "Too many requests - restaurant service does not permit further calls. Please retry after sometime",
+	        HttpStatus.TOO_MANY_REQUESTS);
+
+	  }
+
 	//To get All restaurant
 	@GetMapping("/restaurant")
-	public List<RestaurantModel> getRestaurant(){
-		return restaurantService.getAllRestaurant();
+	//@PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+	@RateLimiter(name = RESTAURANT_SERVICE, fallbackMethod = "rateLimiterFallback")
+	public ResponseEntity<List<RestaurantModel>> getRestaurant(){
+		List<RestaurantModel> restList=restaurantService.getAllRestaurant();
+		return ResponseEntity.of(Optional.of(restList));
 	}
 	
 	//To get restaurants By id
 	@GetMapping("/restaurant/{id}")
+	//@PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+	@RateLimiter(name = RESTAURANT_SERVICE, fallbackMethod = "rateLimiterFallback")
 	public ResponseEntity<RestaurantModel> getById(@PathVariable int id){
 		return restaurantService.getRestaurantById(id);
 	}
 	
 	//To get Restaurant by status
 	@GetMapping("/restaurants/{status}")
+	@PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
 	public RestaurantModel getByStatus(@PathVariable String status) {
 		return restaurantService.getRestaurantByStatus(status);
 	}
 	
 	//To delete restaurant By Id
 	@DeleteMapping("/restaurant/{id}")
+	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<HttpStatus> deleteByRestaurantId(@PathVariable int id){
 		return restaurantService.deleteById(id);
 	}
 	
 	//To update Restaurant 
 	@PutMapping("/restaurant/{id}")
+	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<RestaurantModel> updateRestaurant(@PathVariable int id, @RequestBody RestaurantModel rm){
+		System.out.println("Inside update controller");
 		return restaurantService.updateRestaurant(id, rm);
 	}
 	
 	//To get Image By name and restaurant Id
 	@GetMapping("/file/{name}/{id}")
+    
 	//@GetMapping("/file/{name}")
 	  public ResponseEntity<byte[]> getFileByName(@PathVariable String name,@PathVariable int id) {
 		  System.out.println("name="+name+"Id="+id);
@@ -93,6 +117,7 @@ public class RestaurantController {
 	                 
       //To change restaurant status active/deactive	  
 	  @PutMapping("/changestatus/{id}")
+	  @PreAuthorize("hasRole('ADMIN')")
 		public RestaurantModel statusChange(@PathVariable int id, @RequestBody RestaurantModel rm){
 		  System.out.println("In change status of put....");
 			return restaurantService.changeStatus(id, rm);

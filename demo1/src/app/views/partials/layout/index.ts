@@ -17,7 +17,7 @@ export { SubheaderSearchComponent } from './subheader/subheader-search/subheader
 
 // Topbar components
 export { LanguageSelectorComponent } from './topbar/language-selector/language-selector.component';
-//export { NotificationComponent } from './topbar/notification/notification.component';
+export { NotificationComponent } from './topbar/notification/notification.component';
 export { QuickActionComponent } from './topbar/quick-action/quick-action.component';
 export { SearchDefaultComponent } from './topbar/search-default/search-default.component';
 export { SearchDropdownComponent } from './topbar/search-dropdown/search-dropdown.component';

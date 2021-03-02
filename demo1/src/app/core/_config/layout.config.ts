@@ -13,7 +13,6 @@ export class LayoutConfig {
 				dark: './assets/media/logos/logo-light.png',
 				light: './assets/media/logos/logo-dark.png',
 				brand: './assets/media/logos/logo-light.png',
-				//brand: './assets/media/logos/zonions.jpeg',
 				green: './assets/media/logos/logo-light.png',
 			},
 		},
@@ -21,8 +20,8 @@ export class LayoutConfig {
 		loader: {
 			enabled: true,
 			type: 'spinner-logo',
-			logo: './assets/media/logos/logo-mini-md.png',
-			message: 'Please wait...',
+			logo: './assets/media/logos/spinner.jpeg',
+			message: 'Loading....',
 		},
 		// == Colors for javascript
 		colors: {

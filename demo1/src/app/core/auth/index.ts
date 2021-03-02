@@ -1,7 +1,7 @@
 // SERVICES
 export { AuthService } from './_services';
 export { AuthNoticeService } from './auth-notice/auth-notice.service';
-
+export { TokenStorageService } from './_services';
 // DATA SOURCERS
 export { RolesDataSource } from './_data-sources/roles.datasource';
 export { UsersDataSource } from './_data-sources/users.datasource';
