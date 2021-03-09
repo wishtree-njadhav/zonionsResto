@@ -1,19 +1,30 @@
-<div class="table-responsive">
-	<h3 style="text-align: center;">Active Restaurants</h3>
-	<table class="table table-striped">
-	  <thead>
-		<th>Restaurant Name</th>
-		<th>Action</th>
-	  </thead>
-	  <tbody >
-		<!-- <tr *ngIf=" r.status==='active'"> -->
-			<tr *ngFor="let r of restaurant">
-		  <td class="col-2"><b>{{r.restaurantName}}</b></td>
-		  <td><a [routerLink]="['/restaurants/restaurantDetail',r.restaurantName]">
-			  <button class="btn btn-info">Details</button></a></td>
-		</tr>
-  
-	  </tbody>
-	</table>
-	<h2>Hiiii</h2>
-  </div>
+<div class="row">
+	<div class="col-xl-6">
+		<div class="row row-full-height">
+			<div class="col-sm-12 col-md-12 col-lg-6">
+				<kt-portlet [class]="'kt-portlet--height-fluid-half kt-portlet--border-bottom-brand'">
+					<kt-portlet-body [class]="'kt-portlet__body--fluid'">
+						<kt-widget26 value={{restaurantLength}} [desc]="'Active Restaurant'" [options]="chartOptions1"></kt-widget26>
+					</kt-portlet-body>
+				</kt-portlet>
+
+				<div class="kt-space-20"></div>
+
+				<kt-portlet [class]="'kt-portlet--height-fluid-half kt-portlet--border-bottom-brand'">
+					<kt-portlet-body [class]="'kt-portlet__body--fluid'">
+						<kt-widget26 value= {{userLength}} [desc]="'Total Users'" [options]="chartOptions2"></kt-widget26>
+					</kt-portlet-body>
+				</kt-portlet>
+			</div>
+
+			<!-- <div class="col-sm-12 col-md-12 col-lg-6">
+				
+
+				<div class="kt-space-20"></div>
+
+				
+			</div> -->
+		</div>
+	</div>
+	
+</div>

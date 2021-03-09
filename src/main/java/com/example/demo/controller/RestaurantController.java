@@ -25,7 +25,7 @@ import com.example.demo.repository.RestaurantRepository;
 import com.example.demo.service.RestaurantService;
 
 import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
-@CrossOrigin(origins = "http://localhost:5000")
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/zonions")
 public class RestaurantController {
@@ -37,8 +37,8 @@ public class RestaurantController {
 	//To add restaurant object
 	@PostMapping("/restaurant")
 	@PreAuthorize("hasRole('ADMIN')")
-	public ResponseEntity<RestaurantModel> save(@RequestBody RestaurantModel rest){
-		return restaurantService.createRestaurant(rest);
+	public ResponseEntity<RestaurantModel> save(@RequestBody RestaurantModel restaurant){
+		return restaurantService.createRestaurant(restaurant);
 	}
 	
 	

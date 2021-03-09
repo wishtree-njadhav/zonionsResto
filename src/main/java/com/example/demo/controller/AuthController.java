@@ -41,7 +41,7 @@ import com.example.demo.shared.JwtUtils;
 
 
 
-@CrossOrigin(origins = "http://localhost:5000")
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {

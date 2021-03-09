@@ -12,17 +12,17 @@ const routes: Routes = [
 	
 	   {path: 'auth',
 	    loadChildren: 'app/views/pages/auth/auth.module#AuthModule'},
-		{
-			path: 'dashboard',
-			loadChildren: 'app/views/pages/dashboard/dashboard.module#DashboardModule'
-		},
+		
 
 	{
 		path: '',
 		component: BaseComponent,
 		canActivate: [AuthGuard],
 		children: [
-			
+			{
+				path: 'dashboard',
+				loadChildren: 'app/views/pages/dashboard/dashboard.module#DashboardModule'
+			},
 			{
 				path: 'restaurants',
 				loadChildren: 'app/views/pages/restaurants/restaurants.module#RestaurantsModule'

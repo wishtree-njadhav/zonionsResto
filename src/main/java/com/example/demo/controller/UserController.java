@@ -21,7 +21,7 @@ import com.example.demo.repository.RegistrationRepository;
 import com.example.demo.repository.RoleRepository;
 import com.example.demo.service.UserDetailsServiceImpl;
 
-@CrossOrigin(origins = "http://localhost:5000")
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/auth")
 public class UserController {

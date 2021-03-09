@@ -11,6 +11,8 @@ export class RestaurantService {
   baseUrl = 'http://localhost:8080/zonions/restaurant';
   urlimage = 'http://localhost:8080/zonions/restaurantImage';
  changestatus = 'http://localhost:8080/zonions/changestatus';
+ bookTableUrl = 'http://localhost:8080/zonions/bookTable';
+
  constructor(private http: HttpClient) { }
 
  getRestaurantList(): Observable<Restaurant[]> {
@@ -53,4 +55,8 @@ export class RestaurantService {
    console.log('request object in service', req);
    return this.http.request(req);
  }
+ // BookTable
+ bookTable(bookTable: any): Observable<any> {
+  return this.http.post(this.bookTableUrl, bookTable);
+}
 }
