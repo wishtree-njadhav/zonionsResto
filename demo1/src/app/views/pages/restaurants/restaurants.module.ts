@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+// tslint:disable-next-line: max-line-length
 import { MatAutocompleteModule, MatButtonModule, MatCardModule, MatCheckboxModule, MatDatepickerModule, MatDialogModule, MatIconModule, MatInputModule, MatMenuModule, MatNativeDateModule, MatPaginatorModule, MatProgressBarModule, MatProgressSpinnerModule, MatRadioModule, MatSelectModule, MatSlideToggleModule, MatSnackBarModule, MatSortModule, MatTableModule, MatTabsModule, MatToolbarModule, MatTooltipModule, MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material';
 import { RouterModule, Routes } from '@angular/router';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -19,41 +20,54 @@ import { RestaurantListComponent } from './restaurant-list/restaurant-list.compo
 import { RestaurantsComponent } from './restaurants.component';
 import { UpdateRestaurantComponent } from './update-restaurant/update-restaurant.component';
 import { UserDetailComponent } from './user-detail/user-detail.component';
-
-
+import { DialogComponent } from './dialog/dialog.component';
+import { UserDeleteComponent} from './delete-user/user-delete.component';
+import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
 
 const routes: Routes = [
 	{
 		path: '',
 		component: RestaurantsComponent,
+		data : {breadcrumb : 'Restaurants'},
 		children: [
 			{
 				path: 'home',
-				component: HomeComponent
+				component: HomeComponent,
+				data : {breadcrumb : 'Home'}
 			},
 			{
 				path: 'create',
-				component: CreateRestaurantComponent
+				component: CreateRestaurantComponent,
+				data : {breadcrumb : 'Create Restaurant'}
+
             },
             {
                 path: 'list',
-                component: RestaurantListComponent
+                component: RestaurantListComponent,
+				data : {breadcrumb : 'Restaurant List'}
+
 			},
 			{
 				path: 'update/:id',
-				component: UpdateRestaurantComponent
+				component: UpdateRestaurantComponent,
+				data : {breadcrumb : ''}
+
 			},
 			{
 				path: 'restaurantDetail/:restaurantName',
-				component: RestaurantDetailsComponent
+				component: RestaurantDetailsComponent,
+				data : {breadcrumb : 'Restaurant Detail'}
+
 			},
 			{
-				path:'users',
-				component:UserDetailComponent
+				path: 'users',
+				component: UserDetailComponent,
+				data : {breadcrumb : 'Users List'}
+
 			},
 			{
-				path:'admin-dashboard',
-				component:AdminDashboardComponent
+				path: 'booktable',
+				component: BookTableComponent
 			}
 
 		]
@@ -106,12 +120,15 @@ const routes: Routes = [
 		UserDetailComponent,
 		AdminDashboardComponent,
 		RestaurantDeleteComponent,
-		BookTableComponent
+		BookTableComponent,
+		DialogComponent,
+		UserDeleteComponent,
+		BreadcrumbComponent
 	],
 	providers: [
 		{provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: {floatLabel: 'always'}}
 	 ],
-	entryComponents: [CreateRestaurantComponent, RestaurantDeleteComponent] ,
+	entryComponents: [CreateRestaurantComponent, RestaurantDeleteComponent, DialogComponent,UserDeleteComponent] ,
 })
 export class RestaurantsModule {
 }

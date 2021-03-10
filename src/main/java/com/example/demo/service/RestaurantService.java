@@ -38,6 +38,7 @@ public class RestaurantService {
 			return new ResponseEntity<>(null,HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+	
 	//Service To add Image
 	public String uploadImage(@RequestParam("file") MultipartFile file,@PathVariable int id) {
 		
@@ -82,6 +83,7 @@ public class RestaurantService {
 		return data;
 	}
 	
+	//Service delete restaurant by id
 	public ResponseEntity<HttpStatus> deleteById(@PathVariable int id){
 		try {
 			restaurantRepository.deleteById(id);
@@ -91,6 +93,8 @@ public class RestaurantService {
 			return new ResponseEntity<HttpStatus>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+	
+	//service update restaurant
 	public ResponseEntity<RestaurantModel> updateRestaurant(@PathVariable int id,@RequestBody RestaurantModel resmodel){
 		Optional<RestaurantModel> restData=restaurantRepository.findById(id);
 		if(restData.isPresent()) {
@@ -109,6 +113,7 @@ public class RestaurantService {
 		}
 	}
 	
+	//service to change status of restaurant
 	public RestaurantModel changeStatus(@PathVariable int id,@PathVariable RestaurantModel resm) {
 		System.out.println(resm);
 		String st="deactive";

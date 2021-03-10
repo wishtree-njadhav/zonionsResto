@@ -33,7 +33,7 @@ export class LayoutConfig {
 				success: '#34bfa3',
 				info: '#36a3f7',
 				warning: '#ffb822',
-				danger: '#fd3995',
+				danger: '#f50707',
 			},
 			base: {
 				label: [

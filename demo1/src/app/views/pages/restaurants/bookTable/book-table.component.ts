@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { BookTable } from '../_helpers/bookTable';
 import { RestaurantService } from '../_services/restaurant.service';
 
@@ -23,7 +24,8 @@ export class BookTableComponent implements OnInit {
     time = { hour: 13, minute: 30 };
     bookTable: BookTable;
     startDate = new Date(1990, 0, 1);
-    constructor(private fb: FormBuilder, private restaurantService: RestaurantService) {
+    constructor(private fb: FormBuilder, private restaurantService: RestaurantService,
+      private router:Router) {
     this.bookingForm = fb.group({
         restaurantName: new FormControl('', [Validators.required, Validators.maxLength(25),
             Validators.pattern('^[a-zA-Z ]*$')]),
@@ -52,5 +54,7 @@ export class BookTableComponent implements OnInit {
           this.restaurantService.bookTable(this.bookingForm.value). subscribe (data => {
                 console.log(data);
           });
+         this.router.navigate(['restaurants', 'home']);
+
         }
 }

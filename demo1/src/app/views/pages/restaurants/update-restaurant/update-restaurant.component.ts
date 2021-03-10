@@ -1,6 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { DialogComponent } from '../dialog/dialog.component';
 import { Restaurant } from '../_helpers/restaurant';
 import { RestaurantService } from '../_services/restaurant.service';
 
@@ -30,13 +32,14 @@ export class UpdateRestaurantComponent implements OnInit {
     hour: 21,
     minute: 30
   };
+  comp: string ;
   constructor(private restaurantService: RestaurantService, private route: ActivatedRoute,
-              private router: Router) {
-              this.restaurant = new Restaurant();
+    private router: Router , private modalService: NgbModal) {
+    this.restaurant = new Restaurant();
   }
   ngOnInit(): void {
     this.restaurant = new Restaurant();
-    this.id = this.route.snapshot.params.id;
+    //this.id = this.route.snapshot.params.id;
     console.log(this.id);
     this.restaurantService.getRestoId(this.id).subscribe(data => {
       console.log(data);
@@ -45,21 +48,21 @@ export class UpdateRestaurantComponent implements OnInit {
       this.t = parseInt(this.restaurant.open_time.slice(0, 2));
       // tslint:disable-next-line: radix
       this.q = parseInt(this.restaurant.open_time.slice(3, 5));
-      this.open_time = { hour: this.t, minute: this.q};
+      this.open_time = { hour: this.t, minute: this.q };
       // tslint:disable-next-line: radix
       const ch: number = parseInt(this.restaurant.close_time.slice(0, 2));
       // tslint:disable-next-line: radix
       const cm: number = parseInt(this.restaurant.close_time.slice(3, 5));
-      this.close_time = { hour: ch, minute: cm};
+      this.close_time = { hour: ch, minute: cm };
       console.log('image name', this.restaurant.name);
       this.finalurl = 'http://localhost:8080/zonions/file';
       this.url = `${this.finalurl}/${this.restaurant.name}/${this.id}`;
 
       console.log(this.url);
     }, error => {
-        if (error.status === 500) {
-            this.router.navigate(['error/500']);
-          }
+      if (error.status === 500) {
+        this.router.navigate(['error/500']);
+      }
     });
   }
   updateResto(): void {
@@ -67,7 +70,9 @@ export class UpdateRestaurantComponent implements OnInit {
     this.restaurantService.update(this.id, this.restaurant).subscribe(data => {
       console.log(data);
 
-
+      const ref = this.modalService.open(DialogComponent);
+        this.comp = 'UpdateRestaurantComponent';
+        ref.componentInstance.comp = this.comp;
       console.log('openTime==', this.open_time);
       this.restaurant = new Restaurant();
 
@@ -81,7 +86,7 @@ export class UpdateRestaurantComponent implements OnInit {
     this.backEvent();
   }
   onChange(file: any): void {
-      this.file = file;
+    this.file = file;
 
   }
   updateImage(): void {
@@ -90,9 +95,9 @@ export class UpdateRestaurantComponent implements OnInit {
       console.log(resp);
 
     }, error => {
-        if (error.status === 500) {
-            this.router.navigate(['error/500']);
-          }
+      if (error.status === 500) {
+        this.router.navigate(['error/500']);
+      }
     });
   }
 

@@ -12,7 +12,6 @@ export class RestaurantService {
   urlimage = 'http://localhost:8080/zonions/restaurantImage';
  changestatus = 'http://localhost:8080/zonions/changestatus';
  bookTableUrl = 'http://localhost:8080/zonions/bookTable';
-
  constructor(private http: HttpClient) { }
 
  getRestaurantList(): Observable<Restaurant[]> {

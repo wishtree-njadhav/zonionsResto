@@ -10,6 +10,8 @@ import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { RestaurantDeleteComponent } from '../delete-restaurant/delete-restaurant.component';
+import { UpdateRestaurantComponent } from '../update-restaurant/update-restaurant.component';
+import { DialogComponent } from '../dialog/dialog.component';
 
 
 @Component({
@@ -17,7 +19,7 @@ import { RestaurantDeleteComponent } from '../delete-restaurant/delete-restauran
   templateUrl: './restaurant-list.component.html',
 })
 export class RestaurantListComponent implements OnInit {
-  //dataSource: RestaurantListDataSource ;
+  // dataSource: RestaurantListDataSource ;
   restaurants = new Array<Restaurant>();
   restaurantList = new Array<Restaurant> () ;
   restList: Restaurant[];
@@ -28,6 +30,7 @@ export class RestaurantListComponent implements OnInit {
   id = 0;
   restaurantObject = new Array<Restaurant>();
   searchKey: string;
+  comp: string;
   constructor(
     private restaurantService: RestaurantService,
     private router: Router,
@@ -39,8 +42,6 @@ export class RestaurantListComponent implements OnInit {
     this.reload();
   }
 
-
-  
 
   reload(): void {
     // tslint:disable-next-line: deprecation
@@ -72,8 +73,23 @@ export class RestaurantListComponent implements OnInit {
     ref.componentInstance.id = restaurant.id;
   }
 
-  edit(id: number): void {
-    this.router.navigate(['restaurants', 'update', id]);
+  // edit(id: number): void {
+  //   this.router.navigate(['restaurants', 'update', id]);
+  // }
+
+  edit(restaurant: Restaurant): void {
+    // this.router.navigate(['restaurants', 'update', id]);
+    const ref = this.modalService.open(UpdateRestaurantComponent, { centered: true });
+    ref.componentInstance.restaurant = restaurant;
+    ref.componentInstance.id = restaurant.id;
+    ref.result.then((yes) => {
+      console.log('Yes Click');
+
+    },
+      (cancel) => {
+        console.log('Cancel Click');
+
+      });
   }
   back(): void {
     this.router.navigate(['restaurants', 'home']);
@@ -90,6 +106,9 @@ export class RestaurantListComponent implements OnInit {
       this.restaurantService.changeStatus(id, this.restaurantObject).subscribe(
         (data) => {
           console.log(data);
+          const ref = this.modalService.open(DialogComponent);
+          this.comp = 'RestaurantListComponent' ;
+          ref.componentInstance.comp = this.comp;
           this.reload();
         }, error => {
           if (error.status === 500) {

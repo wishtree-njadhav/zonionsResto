@@ -2,6 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { DialogComponent } from '../dialog/dialog.component';
 import { Restaurant } from '../_helpers/restaurant';
 import { RestaurantService } from '../_services/restaurant.service';
 
@@ -15,6 +17,8 @@ export class CreateRestaurantComponent implements OnInit {
   isSubmitted = true;
   data: any;
   file: any;
+  comp: string;
+  confirm: boolean;
   restaurantId: any;
   restaurantData: any;
   // tslint:disable-next-line: variable-name
@@ -24,7 +28,7 @@ export class CreateRestaurantComponent implements OnInit {
   time = { hour: 13, minute: 30 };
   restaurantForm = new FormGroup({
     restaurantName: new FormControl('', [Validators.required,
-                   Validators.pattern('^(?:[A-Za-z]+)(?:[A-Za-z0-9 _]*)$')]),
+    Validators.pattern('^(?:[A-Za-z]+)(?:[A-Za-z0-9 _]*)$')]),
     address: new FormControl('', [Validators.required]),
     phone_no: new FormControl('', [Validators.required, Validators.pattern('[7-9][0-9]{9}')]),
     open_time: new FormControl('', [Validators.required]),
@@ -33,9 +37,9 @@ export class CreateRestaurantComponent implements OnInit {
 
   constructor(
     private restaurantService: RestaurantService,
-    private router: Router) {
+    private router: Router, private modalService: NgbModal) {
   }
-  ngOnInit(): void {}
+  ngOnInit(): void { }
   get form(): any {
     return this.restaurantForm.controls;
   }
@@ -55,7 +59,9 @@ export class CreateRestaurantComponent implements OnInit {
       (res) => {
         console.log('after adding resto', res);
         this.restaurantData = res;
-
+        const ref = this.modalService.open(DialogComponent);
+        this.comp = 'CreateRestaurantComponent';
+        ref.componentInstance.comp = this.comp;
         console.log('id from restaurant data', this.restaurantData.id);
       }, error => {
         if (error.status === 500) {

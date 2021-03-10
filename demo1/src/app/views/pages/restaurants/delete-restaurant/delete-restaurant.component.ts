@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { constant } from 'lodash';
+import { DialogComponent } from '../dialog/dialog.component';
 import { RestaurantService } from '../_services/restaurant.service';
 
 
@@ -10,6 +12,8 @@ import { RestaurantService } from '../_services/restaurant.service';
   })
   export class RestaurantDeleteComponent implements OnInit {
       id: number;
+      confirm = false;
+      comp: string;
       constructor(private restaurantServiec: RestaurantService, private router: Router, private modalService: NgbModal) {
       }
     ngOnInit(): void {
@@ -20,8 +24,12 @@ import { RestaurantService } from '../_services/restaurant.service';
     this.restaurantServiec.deleteResto(this.id).subscribe(
       (data) => {
         console.log(data);
-        console.log();
+        this.confirm = true;
         this.modalService.dismissAll();
+        const ref = this.modalService.open(DialogComponent);
+        this.comp = 'RestaurantDeleteComponent' ;
+        ref.componentInstance.comp = this.comp;
+
         window.location.reload();
       }, error => {
         if (error.status === 500) {
@@ -32,6 +40,9 @@ import { RestaurantService } from '../_services/restaurant.service';
   }
 
      closeRestaurant() {
-        this.modalService.dismissAll();
+       this.modalService.dismissAll();
+       this.confirm = false;
+       const ref = this.modalService.open(DialogComponent);
+       ref.componentInstance.confirm = this.confirm;
     }
   }
