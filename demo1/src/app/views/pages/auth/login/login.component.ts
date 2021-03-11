@@ -37,10 +37,11 @@ export class LoginComponent implements OnInit, OnDestroy {
 	errors: any = [];
 	isLoggedIn = false;
 	roles: string[] = [];
+	// title: any;
 	private unsubscribe: Subject<any>;
 
 	private returnUrl: any;
-
+    
 	// Read more: => https://brianflove.com/2016/12/11/anguar-2-unsubscribe-observables/
 
 	/**
@@ -76,6 +77,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 	 * On init
 	 */
 	ngOnInit(): void {
+	   // this.title.setTitle('zonions/login');
 		this.initLoginForm();
 		if (this.tokenStorage.getToken()) {
 			this.isLoggedIn = true;

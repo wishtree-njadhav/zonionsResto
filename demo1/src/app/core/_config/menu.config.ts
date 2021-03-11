@@ -73,12 +73,12 @@ export class MenuConfig implements OnInit {
 					translate: 'MENU.DASHBOARD',
 					bullet: 'dot',
 				},
-				// {
-				// 	title: 'Layout Builder',
-				// 	root: true,
-				// 	icon: 'flaticon2-expand',
-				// 	page: '/builder'
-				// },
+				{
+					title: 'Layout Builder',
+					root: true,
+					icon: 'flaticon2-expand',
+					page: '/builder'
+				},
 				{
 					title: 'Restaurants',
 					root: true,

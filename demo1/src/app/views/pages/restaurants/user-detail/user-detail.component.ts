@@ -82,8 +82,8 @@ export class UserDetailComponent implements OnInit {
     this.listData.filter = this.searchKey.trim().toLowerCase();
   }
 
-  open(content): void {
-    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title', backdrop: 'static', size: 'lg' });
-  }
+  // open(content): void {
+  //   this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title', backdrop: 'static', size: 'lg' });
+  // }
 
 }

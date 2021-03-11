@@ -210,9 +210,7 @@ export class DashboardComponent implements OnInit {
 	   return this.restService.getRestaurantList().subscribe((data) => {
 
 		 this.restaurant = data;
-		 console.log(this.restaurant);
 		 this.restaurantLength = this.restaurant.length;
-		 console.log(this.restaurantLength);
 	   },   error => {
 		   if (error.status === 500) {
 			 this.router.navigate(['error/500']);

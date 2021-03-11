@@ -95,4 +95,44 @@ export class CreateRestaurantComponent implements OnInit {
     this.router.navigate(['restaurants', 'home']);
   }
 
+  // tslint:disable-next-line: variable-name
+  // tslint:disable-next-line: member-ordering
+  // tslint:disable-next-line: variable-name
+  // tslint:disable-next-line: member-ordering
+  restaurantName_validation_message = {
+    restaurantName: [
+      { type: 'required', message: 'Restaurant name is required' },
+      {
+        type: 'pattern',
+        message: 'Restaurant Name must contain only numbers and letters',
+      },
+    ],
+  };
+  address_validation_message = {
+    address: [{ type: 'required', message: 'Address is required' }],
+  };
+  phone_no_validation_message = {
+    phone_no: [
+      { type: 'required', message: 'phone number is required' },
+      {
+        type: 'pattern',
+        message: 'phone should be start with 7/8/9 and should be 10 digit',
+      },
+    ],
+  };
+
+
+  open_time_validation_message = {
+    open_time :[
+      {type : 'required' ,message: 'Open time is required'}
+    ]
+  
+  }
+  close_time_validation_message = {
+    close_time :[
+      {type : 'required' ,message: 'Close time is required'}
+    ]
+  
+  }
+  
 }

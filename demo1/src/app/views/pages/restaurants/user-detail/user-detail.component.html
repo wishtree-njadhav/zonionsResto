@@ -35,9 +35,9 @@
     </ng-container>
     <br><br>
     <div class="search-div">
-        <button mat-raised-button  (click)="open(content)">
+        <!-- <button mat-raised-button  (click)="open(content)">
             <mat-icon>add</mat-icon>Add
-          </button>
+          </button> -->
         <mat-form-field class="search-form-field">
             <input matInput [(ngModel)]="searchKey" placeholder="Search" autocomplete="on" (keyup)="applyFilter()">
             <button mat-button matSuffix mat-icon-button aria-label="Clear" *ngIf="searchKey" (click)="onSearchClear()">
