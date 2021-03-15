@@ -12,6 +12,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { RestaurantDeleteComponent } from '../delete-restaurant/delete-restaurant.component';
 import { UpdateRestaurantComponent } from '../update-restaurant/update-restaurant.component';
 import { DialogComponent } from '../dialog/dialog.component';
+import { CreateRestaurantComponent } from '../create-restaurant/create-restaurant.component';
 
 
 @Component({
@@ -21,10 +22,10 @@ import { DialogComponent } from '../dialog/dialog.component';
 export class RestaurantListComponent implements OnInit {
   // dataSource: RestaurantListDataSource ;
   restaurants = new Array<Restaurant>();
-  restaurantList = new Array<Restaurant> () ;
+  restaurantList = new Array<Restaurant>();
   restList: Restaurant[];
   restaurant: Restaurant = new Restaurant();
-  displayedColumns = ['restaurantName', 'address', 'phoneNo', 'openTime', 'closeTime', 'updatedTime', 'status' , 'actions' ];
+  displayedColumns = ['restaurantName', 'address', 'phoneNo', 'openTime', 'closeTime', 'updatedTime', 'status', 'actions'];
   @ViewChild(MatSort, { static: false }) sort: MatSort;
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   id = 0;
@@ -107,7 +108,7 @@ export class RestaurantListComponent implements OnInit {
         (data) => {
           console.log(data);
           const ref = this.modalService.open(DialogComponent);
-          this.comp = 'RestaurantListComponent' ;
+          this.comp = 'RestaurantListComponent';
           ref.componentInstance.comp = this.comp;
           this.reload();
         }, error => {
@@ -128,7 +129,15 @@ export class RestaurantListComponent implements OnInit {
     this.listData.filter = this.searchKey.trim().toLowerCase();
   }
 
-  open(content): void {
-    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title', backdrop: 'static', size: 'lg' });
+  open(): void {
+
+
+    const ref = this.modalService.open(CreateRestaurantComponent, { centered: true });
+    //this.modalService.dismissAll();
+
+    // const ref = this.modalService.open(DialogComponent);
+    // this.comp = 'CreateRestaurantComponent';
+    // ref.componentInstance.comp = this.comp;
+    // this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title', backdrop: 'static', size: 'lg' });
   }
 }

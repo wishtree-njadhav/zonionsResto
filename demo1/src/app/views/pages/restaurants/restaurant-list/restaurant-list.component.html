@@ -6,9 +6,12 @@
     </ng-container>
     <br><br>
     <div class="search-div">
-        <button mat-raised-button  (click)="open(content)">
-            <mat-icon>add</mat-icon>Add
+            
+        <button #content mat-raised-button  (click)="open()">
+          <mat-icon>add</mat-icon>Add
+              
           </button>
+    
         <mat-form-field class="search-form-field">
             <input matInput [(ngModel)]="searchKey" placeholder="Search" autocomplete="on" (keyup)="applyFilter()">
             <button mat-button matSuffix mat-icon-button aria-label="Clear" *ngIf="searchKey" (click)="onSearchClear()">
@@ -57,7 +60,7 @@
 
                     <button mat-icon-button color="primary" matTooltip="Delete Restaurant"
                         (click)="deleteRestaurant(element)">
-                        <mat-icon>delete</mat-icon>
+                        <mat-icon>delete_forever</mat-icon>
                     </button>&nbsp;
 
                     <button mat-icon-button color="primary" matTooltip="Change Status"

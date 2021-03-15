@@ -34,13 +34,14 @@ export class UpdateRestaurantComponent implements OnInit {
   };
   comp: string ;
   constructor(private restaurantService: RestaurantService, private route: ActivatedRoute,
-    private router: Router , private modalService: NgbModal) {
+              private router: Router , private modalService: NgbModal) {
     this.restaurant = new Restaurant();
   }
   ngOnInit(): void {
     this.restaurant = new Restaurant();
-    //this.id = this.route.snapshot.params.id;
+    // this.id = this.route.snapshot.params.id;
     console.log(this.id);
+    // tslint:disable-next-line: deprecation
     this.restaurantService.getRestoId(this.id).subscribe(data => {
       console.log(data);
       this.restaurant = data;
@@ -71,8 +72,8 @@ export class UpdateRestaurantComponent implements OnInit {
       console.log(data);
 
       const ref = this.modalService.open(DialogComponent);
-        this.comp = 'UpdateRestaurantComponent';
-        ref.componentInstance.comp = this.comp;
+      this.comp = 'UpdateRestaurantComponent';
+      ref.componentInstance.comp = this.comp;
       console.log('openTime==', this.open_time);
       this.restaurant = new Restaurant();
 
@@ -83,6 +84,8 @@ export class UpdateRestaurantComponent implements OnInit {
     this.restaurant.open_time = this.open_time.hour + ':' + this.open_time.minute;
     this.restaurant.close_time = this.close_time.hour + ':' + this.close_time.minute;
     this.updateResto();
+    this.modalService.dismissAll();
+
     this.backEvent();
   }
   onChange(file: any): void {

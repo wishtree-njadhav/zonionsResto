@@ -94,18 +94,13 @@ export class MenuConfig implements OnInit {
 								{
 									title: 'Restaurant List',
 									page: '/restaurants/list',
-									translate:'MENU.Restaurant_list'
+									translate: 'MENU.Restaurant_list'
 								},
 								{
 									title: 'Active Restaurants',
 									page: '/restaurants/home',
-									translate:'MENU.Active_Restaurant'
+									translate: 'MENU.Active_Restaurant'
 								},
-								{
-									title: 'Admin Dashboard',
-									page: '/restaurants/admin-dashboard'
-								}
-								
 					]
 
 				},
@@ -114,13 +109,14 @@ export class MenuConfig implements OnInit {
 					root: true,
 					alignment: 'left',
 					toggle: 'click',
-					translate:'MENU.User_Management',
+					icon : 'assets/media/icons/svg/General/User.svg',
+					translate: 'MENU.User_Management',
 					submenu: [
 						{
 
 								title: 'Active Users',
 								page: '/restaurants/users',
-								translate:'MENU.Active_Users'
+								translate: 'MENU.Active_Users'
 						}
 					]
 				}

@@ -59,9 +59,7 @@ export class CreateRestaurantComponent implements OnInit {
       (res) => {
         console.log('after adding resto', res);
         this.restaurantData = res;
-        const ref = this.modalService.open(DialogComponent);
-        this.comp = 'CreateRestaurantComponent';
-        ref.componentInstance.comp = this.comp;
+        
         console.log('id from restaurant data', this.restaurantData.id);
       }, error => {
         if (error.status === 500) {
@@ -77,7 +75,11 @@ export class CreateRestaurantComponent implements OnInit {
       .subscribe(
         (resp: any) => {
           console.log(resp);
+          const ref = this.modalService.open(DialogComponent);
+        this.comp = 'CreateRestaurantComponent';
+        ref.componentInstance.comp = this.comp;
           this.backEvent();
+          this.modalService.dismissAll();
         },
         error => {
           if (error.status === 500) {
